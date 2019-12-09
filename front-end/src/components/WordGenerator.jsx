@@ -6,7 +6,8 @@ class WordGenerator extends Component {
         let randomWords = this.props.randomWords;
         return (
             <div id='wordGeneratorContainer'>
-                <h1>{randomWords}</h1>
+                {randomWords
+          .map(word => <h1 key={word.id} className='wordContainer'>{word.word}</h1>)}
             </div>
         )
     }

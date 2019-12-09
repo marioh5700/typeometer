@@ -12,13 +12,15 @@ class TypingModule extends Component {
         this.randomiseWords = this.randomiseWords.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.spacePressed = this.spacePressed.bind(this);
         
     }    
 
     randomiseWords() {
         let tempList = []
         for (let i = 0; i < 50; i++) {
-            let word = this.state.commonWords[Math.floor(Math.random() * this.state.commonWords.length)] + ' '
+            let word = {word: this.state.commonWords[Math.floor(Math.random() * this.state.commonWords.length)],
+            id: tempList.length}
             tempList.push(word)
         }
         this.setState({randomWords: tempList});
@@ -30,11 +32,18 @@ class TypingModule extends Component {
     }
 
     handleChange(contentChild){
-        this.setState({content: contentChild});
+        if(contentChild !== ' '){
+            this.setState({content: contentChild});
+        }
+
+    }
+
+    spacePressed() {
         let tempList = this.state.randomWords;
-        if (contentChild === tempList[0]) {
+        if (this.state.content === tempList[0].word) {
             tempList.shift();
-            tempList.push(this.state.commonWords[Math.floor(Math.random() * this.state.commonWords.length)] + ' ')
+            tempList.push({word: this.state.commonWords[Math.floor(Math.random() * this.state.commonWords.length)],
+            id: tempList[tempList.length - 1].id + 1})
             this.setState({randomWords: tempList,
                             content: ''})
         }
@@ -49,7 +58,8 @@ class TypingModule extends Component {
                 randomWords={randomWords}/>
                 <TypingSpace
                 content={content}
-                handleChange={this.handleChange}/>
+                handleChange={this.handleChange}
+                spacePressed={this.spacePressed}/>
             </div>
         )
     }

@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+.wordContainer {
+  display:inline-block;
+  margin:2px;
+}
+
 #wordGeneratorContainer, #typingSpaceContainer {
   width:80%;
   margin:auto;
