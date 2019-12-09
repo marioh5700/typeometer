@@ -6,9 +6,14 @@ class TypingModule extends Component {
     constructor(props){
         super(props);
         this.state = {commonWords : ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 
-        'i', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at'],
+        'i', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at', 'by', 'this', 'we', 
+        'you', 'do', 'but', 'from', 'or', 'which', 'one', 'would', 'all', 'will', 'there', 'say', 
+        'who', 'make', 'when', 'can', 'more', 'if', 'no', 'man', 'out', 'other', 'so', 'what', 'time',
+         'up', 'go', 'about', 'than', 'into', 'could', 'state', 'only', 'new', 'year', 'some', 'take', 
+         'come', 'these', 'know', 'see', 'use', 'get', 'like', 'then', 'first', 'any'],
         randomWords : [],
-        content: ''};
+        content: '',
+        incorrect: false};
         this.randomiseWords = this.randomiseWords.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -34,6 +39,11 @@ class TypingModule extends Component {
     handleChange(contentChild){
         if(contentChild !== ' '){
             this.setState({content: contentChild});
+            if(this.state.randomWords[0].word.includes(contentChild, 0)) {
+                this.setState({incorrect: false});
+            } else {
+                this.setState({incorrect: true});
+            }
         }
 
     }
@@ -52,10 +62,12 @@ class TypingModule extends Component {
     render() {
         let randomWords = this.state.randomWords;
         let content = this.state.content;
+        let incorrect = this.state.incorrect;
         return (
             <div id='typingModuleContainer'>
                 <WordGenerator
-                randomWords={randomWords}/>
+                randomWords={randomWords}
+                incorrect={incorrect}/>
                 <TypingSpace
                 content={content}
                 handleChange={this.handleChange}

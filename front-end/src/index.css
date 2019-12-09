@@ -17,7 +17,11 @@ code {
   margin:2px;
 }
 
-#wordGeneratorContainer, #typingSpaceContainer {
+#wordGeneratorContainer, #wordGeneratorContainerIncorrect, #typingSpaceContainer {
   width:80%;
   margin:auto;
+}
+
+#wordGeneratorContainerIncorrect :first-child {
+  background-color:red;
 }
