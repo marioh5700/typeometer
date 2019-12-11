@@ -39,7 +39,7 @@ class TypingModule extends Component {
     handleChange(contentChild){
         if(contentChild !== ' '){
             this.setState({content: contentChild});
-            if(this.state.randomWords[0].word.includes(contentChild, 0)) {
+            if(this.state.randomWords[0].word.startsWith(contentChild)) {
                 this.setState({incorrect: false});
             } else {
                 this.setState({incorrect: true});

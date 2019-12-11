@@ -17,7 +17,7 @@ code {
   margin:2px;
 }
 
-#wordGeneratorContainer, #wordGeneratorContainerIncorrect, #typingSpaceContainer {
+#wordGeneratorContainer, #wordGeneratorContainerIncorrect, #typingSpaceContainer, #timerContainer {
   width:80%;
   margin:auto;
 }
