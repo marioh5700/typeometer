@@ -9,16 +9,21 @@ class TypingSpace extends Component {
 
    handleChange(event){
        this.props.handleChange(event.target.value);
+       this.props.startTimer();
    }
 
    keyPressed(event){
        if (event.key === ' ') {
             this.props.spacePressed();
        }
+       this.props.characterTyped();
+
    }
 
     render() {
         let content = this.props.content;
+        let seconds = this.props.seconds;
+        let wpm = this.props.wpm;
         return (
             <div id='typingSpaceContainer'>
                 <input 
@@ -26,6 +31,8 @@ class TypingSpace extends Component {
                     onChange={this.handleChange}
                     onKeyDown={this.keyPressed}
                 />
+                <h1>Time Remaining: {seconds}</h1>
+                <h1>WPM: {wpm}</h1>
             </div>
         )
     }

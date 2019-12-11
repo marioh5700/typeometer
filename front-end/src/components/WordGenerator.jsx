@@ -5,7 +5,6 @@ class WordGenerator extends Component {
     render() {
         let randomWords = this.props.randomWords;
         if (this.props.incorrect === true){
-            console.log('incorrect')
             return (
                 <div id='wordGeneratorContainerIncorrect'>
                     {randomWords

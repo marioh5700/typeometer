@@ -13,11 +13,17 @@ class TypingModule extends Component {
          'come', 'these', 'know', 'see', 'use', 'get', 'like', 'then', 'first', 'any'],
         randomWords : [],
         content: '',
-        incorrect: false};
+        incorrect: false,
+        started: false,
+        seconds: 60,
+        charCount: 0,
+        wpm: 0};
         this.randomiseWords = this.randomiseWords.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.spacePressed = this.spacePressed.bind(this);
+        this.startTimer = this.startTimer.bind(this);
+        this.characterTyped = this.characterTyped.bind(this);
         
     }    
 
@@ -59,10 +65,41 @@ class TypingModule extends Component {
         }
     }
 
+    characterTyped() {
+        this.setState(({charCount}) => ({
+            charCount: charCount + 1
+        }))
+    }
+
+    startTimer() {
+        if (!this.state.started){
+            this.countdown = setInterval(() => {
+                const seconds = this.state.seconds;
+
+                if (seconds > 0) {
+                    this.setState(({seconds}) => ({
+                        seconds: seconds - 1
+                    }))
+                    this.setState(({charCount, seconds}) => ({
+                        wpm: ((charCount / 5) / ((60 - seconds) / 60))
+                    }))
+                } else {
+                    clearInterval(this.countdown);
+                    this.setState({started: false,
+                                    seconds: 60});
+                } 
+
+            }, 1000)
+            this.setState({started: true});
+        }
+    }
+
     render() {
         let randomWords = this.state.randomWords;
         let content = this.state.content;
         let incorrect = this.state.incorrect;
+        let seconds = this.state.seconds;
+        let wpm = this.state.wpm;
         return (
             <div id='typingModuleContainer'>
                 <WordGenerator
@@ -70,8 +107,12 @@ class TypingModule extends Component {
                 incorrect={incorrect}/>
                 <TypingSpace
                 content={content}
+                seconds={seconds}
+                wpm={wpm}
                 handleChange={this.handleChange}
-                spacePressed={this.spacePressed}/>
+                spacePressed={this.spacePressed}
+                characterTyped={this.characterTyped}
+                startTimer={this.startTimer}/>
             </div>
         )
     }
