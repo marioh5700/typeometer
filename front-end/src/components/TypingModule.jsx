@@ -25,6 +25,7 @@ class TypingModule extends Component {
         this.spacePressed = this.spacePressed.bind(this);
         this.startTimer = this.startTimer.bind(this);
         this.characterTyped = this.characterTyped.bind(this);
+        this.resetTimer = this.resetTimer.bind(this);
         
     }    
 
@@ -95,6 +96,17 @@ class TypingModule extends Component {
         }
     }
 
+    resetTimer() {
+        clearInterval(this.countdown);
+        this.setState({content: '',
+                        incorrect:false,
+                        charCount: 0,
+                        started: false,
+                        seconds: 60,
+                        wpm: 0})
+        this.randomiseWords();
+    }
+
     render() {
         let randomWords = this.state.randomWords;
         let content = this.state.content;
@@ -113,7 +125,8 @@ class TypingModule extends Component {
                 handleChange={this.handleChange}
                 spacePressed={this.spacePressed}
                 characterTyped={this.characterTyped}
-                startTimer={this.startTimer}/>
+                startTimer={this.startTimer}
+                resetTimer={this.resetTimer}/>
             </div>
         )
     }

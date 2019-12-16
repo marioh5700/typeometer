@@ -5,6 +5,7 @@ class TypingSpace extends Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
+        this.resetEvent = this.resetEvent.bind(this);
     }    
 
     handleChange(event){
@@ -23,6 +24,10 @@ class TypingSpace extends Component {
 
     }
 
+    resetEvent(){
+        this.props.resetTimer();
+    }
+
     render() {
         let content = this.props.content;
         let seconds = this.props.seconds;
@@ -37,6 +42,9 @@ class TypingSpace extends Component {
                 />
                 <h1>Time Remaining: {seconds}</h1>
                 <h1>WPM: {wpm}</h1>
+                <button
+                onClick={this.resetEvent}
+                >Reset</button>
             </div>
         )
     }
