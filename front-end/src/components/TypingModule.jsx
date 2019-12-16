@@ -18,6 +18,7 @@ class TypingModule extends Component {
         seconds: 60,
         charCount: 0,
         wpm: 0};
+        
         this.randomiseWords = this.randomiseWords.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -66,9 +67,11 @@ class TypingModule extends Component {
     }
 
     characterTyped() {
-        this.setState(({charCount}) => ({
-            charCount: charCount + 1
-        }))
+        if (!this.state.incorrect) {
+            this.setState(({charCount}) => ({
+                charCount: charCount + 1
+            }))
+        }
     }
 
     startTimer() {
@@ -85,8 +88,6 @@ class TypingModule extends Component {
                     }))
                 } else {
                     clearInterval(this.countdown);
-                    this.setState({started: false,
-                                    seconds: 60});
                 } 
 
             }, 1000)

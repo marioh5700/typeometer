@@ -7,27 +7,31 @@ class TypingSpace extends Component {
         this.keyPressed = this.keyPressed.bind(this);
     }    
 
-   handleChange(event){
+    handleChange(event){
        this.props.handleChange(event.target.value);
        this.props.startTimer();
-   }
+    }
 
-   keyPressed(event){
-       if (event.key === ' ') {
+    keyPressed(event){
+        if (event.key === ' ') {
             this.props.spacePressed();
-       }
-       this.props.characterTyped();
+            this.props.characterTyped();
+        }
+        if ((event.keyCode >= 48 && event.keyCode <= 90) ||  (event.keyCode >= 96 && event.keyCode <= 111)) {
+            this.props.characterTyped();
+        }
 
-   }
+    }
 
     render() {
         let content = this.props.content;
         let seconds = this.props.seconds;
-        let wpm = this.props.wpm;
+        let wpm = Math.round(this.props.wpm);
         return (
             <div id='typingSpaceContainer'>
                 <input 
                     value={content}
+                    disabled = {(seconds === 0)? "disabled" : ""}
                     onChange={this.handleChange}
                     onKeyDown={this.keyPressed}
                 />
