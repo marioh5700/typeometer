@@ -15,7 +15,7 @@ class TypingModule extends Component {
         content: '',
         incorrect: false,
         started: false,
-        seconds: 60,
+        seconds: 30,
         charCount: 0,
         wpm: 0};
         
@@ -85,7 +85,7 @@ class TypingModule extends Component {
                         seconds: seconds - 1
                     }))
                     this.setState(({charCount, seconds}) => ({
-                        wpm: ((charCount / 5) / ((60 - seconds) / 60))
+                        wpm: ((charCount / 5) / ((30 - seconds) / 60))
                     }))
                 } else {
                     clearInterval(this.countdown);
@@ -102,7 +102,7 @@ class TypingModule extends Component {
                         incorrect:false,
                         charCount: 0,
                         started: false,
-                        seconds: 60,
+                        seconds: 30,
                         wpm: 0})
         this.randomiseWords();
     }

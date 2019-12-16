@@ -25,5 +25,6 @@ app.get('/api/courses/:id', (req, res) => {
 });
 
 //PORT
-const port = process.env.PORT || 3000;
+//process.env.PORT
+const port = 5000;
 app.listen(port, () => console.log(`istening on port ${port}...`))
