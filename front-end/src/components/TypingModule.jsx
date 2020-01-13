@@ -15,9 +15,10 @@ class TypingModule extends Component {
         content: '',
         incorrect: false,
         started: false,
-        seconds: 30,
+        seconds: 10,
         charCount: 0,
-        wpm: 0};
+        wpm: 0,
+        stats: []};
         
         this.randomiseWords = this.randomiseWords.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -26,6 +27,7 @@ class TypingModule extends Component {
         this.startTimer = this.startTimer.bind(this);
         this.characterTyped = this.characterTyped.bind(this);
         this.resetTimer = this.resetTimer.bind(this);
+        this.getData = this.getData.bind(this);
         
     }    
 
@@ -40,8 +42,17 @@ class TypingModule extends Component {
         
     }
 
+    getData() {
+        fetch('http://localhost:5000/')
+        .then(res => res.json())
+        .then((results) => {
+            this.setState({stats: results});
+        })
+    }
+
     componentDidMount() {
         this.randomiseWords();
+        this.getData()
     }
 
     handleChange(contentChild){
@@ -113,6 +124,7 @@ class TypingModule extends Component {
         let incorrect = this.state.incorrect;
         let seconds = this.state.seconds;
         let wpm = this.state.wpm;
+        let stats = this.state.stats;
         return (
             <div id='typingModuleContainer'>
                 <WordGenerator
@@ -122,11 +134,13 @@ class TypingModule extends Component {
                 content={content}
                 seconds={seconds}
                 wpm={wpm}
+                stats={stats}
                 handleChange={this.handleChange}
                 spacePressed={this.spacePressed}
                 characterTyped={this.characterTyped}
                 startTimer={this.startTimer}
-                resetTimer={this.resetTimer}/>
+                resetTimer={this.resetTimer}
+                getData={this.getData}/>
             </div>
         )
     }

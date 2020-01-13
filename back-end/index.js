@@ -1,27 +1,59 @@
 const Joi = require('joi');
 const express = require('express');
-const app = express();
+var app = express();
+var cors = require('cors');
+var sqlite3 = require('sqlite3').verbose();
 
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
-const courses = [
-    {id: 1, name: 'course1' },
-    {id: 2, name: 'course2' },
-    {id: 3, name: 'course3' }
-];
+let db = new sqlite3.Database('stats.db', (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the stats database.');
+});
 
 app.get('/', (req, res) => {
-    res.send('it be like that sometimes');
+    let sql = `SELECT Wpm wpm FROM wpm_history
+           ORDER BY id`;
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.send(rows);
+    });
 });
 
-app.get('/api/courses', (req, res) => {
-    res.send(courses);
-});
+app.post('/postrun', (req, res) => {
+    let sql = `INSERT INTO wpm_history (wpm) 
+            VALUES (?)`;
+    
+    db.run(sql, [req.body.wpm], (err) => {
+        if (err) {
+            return console.log(err.message);
+          }
 
-app.get('/api/courses/:id', (req, res) => {
-    const course = courses.find(c => c.id == parseInt(req.params.id));
-    if(!course) res.status(404).send('The course with the given id was not found');
-    res.send(course);
+        res.send(`You sent: ${req.body.wpm}`);
+
+        sql = `SELECT COUNT(*) FROM wpm_history AS count`;
+        let deleteNumber = 0;
+
+        db.all(sql, [], (err, countObj) => {
+            deleteNumber = countObj[0][Object.keys(countObj[0])[0]] - 10;
+
+            sql = "DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history order by id LIMIT " + deleteNumber + ")";
+
+            db.run(sql, [], function(err) {
+                if (err) {
+                return console.error(err.message);
+                }
+                console.log(`Row(s) deleted ${this.changes}`);
+            });
+        });
+    });
 });
 
 //PORT

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LastTenRuns from './LastTenRuns';
 
 class TypingSpace extends Component {
     constructor(props){
@@ -6,7 +7,31 @@ class TypingSpace extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.resetEvent = this.resetEvent.bind(this);
-    }    
+        this.submitRun = this.submitRun.bind(this);
+    }   
+    
+    submitRun() {
+        let params = {
+            wpm: Math.round(this.props.wpm)
+          };
+
+        fetch('http://localhost:5000/postrun', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(params)
+        })
+        .then(
+            this.props.getData
+        );
+    }
+
+    componentDidUpdate(prevProps) {
+        if ((this.props.seconds === 0) && (this.props.seconds !== prevProps.seconds)) {
+            this.submitRun()
+        }
+    }
 
     handleChange(event){
        this.props.handleChange(event.target.value);
@@ -32,6 +57,8 @@ class TypingSpace extends Component {
         let content = this.props.content;
         let seconds = this.props.seconds;
         let wpm = Math.round(this.props.wpm);
+        let stats = this.props.stats;
+
         return (
             <div id='typingSpaceContainer'>
                 <input 
@@ -45,6 +72,13 @@ class TypingSpace extends Component {
                 <button
                 onClick={this.resetEvent}
                 >Reset</button>
+                <div>
+                {stats
+              .map((stat, index) => <h1 key={index} className='wordContainer'>{stat.wpm}</h1>)}
+                </div>
+                <LastTenRuns
+                seconds={seconds}
+                stats={stats}/>
             </div>
         )
     }
