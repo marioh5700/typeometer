@@ -25,7 +25,7 @@ class LastTenRuns extends Component {
         barContext.drawn = true;
 
         let data = [];
-        let count = 1;
+        let count = 0;
         for (const key in this.props.stats) {
             data.push({key: count, value: this.props.stats[key].wpm});
             count += 1;
@@ -92,76 +92,21 @@ class LastTenRuns extends Component {
         barContext.svg = svg;
         barContext.xAxis = xAxis;
         barContext.yAxis = yAxis;
-        barContext.data = data;
 
-    }
-
-    udpateChart() {
-        //just reference the stuff from html with d3.select and re estabilish variables that way. should be fine?? i hope
-        let data = [];
-        for (const key in this.props.stats) {
-            data.push({key: this.props.stats[key].wpm, value: this.props.stats[key].wpm});
-        }
-
-        const margin = this.state.margin;
-        const height = this.state.height - margin.top - margin.bottom; 
-        const width = this.state.width - margin.left - margin.right;
-        const svg = barContext.svg;
-
-        // Initialize the X axis
-        var x = d3.scaleBand()
-        .range([ 0, width ])
-        .padding(0.2);
-        var xAxis = barContext.xAxis;
-
-        // Initialize the Y axis
-        var y = d3.scaleLinear()
-        .range([ height, 0]);
-        var yAxis = barContext.yAxis;
-        // Update the X axis
-        x.domain(data.map(function(d) { return d.key; }))
-        xAxis.call(d3.axisBottom(x))
-
-        // Update the Y axis
-        y.domain([0, d3.max(data, function(d) { return d.value }) ]);
-        yAxis.transition().duration(1000).call(d3.axisLeft(y));
-
-        // Create the u variable
-        var rect = svg.selectAll("rect")
-            .data(data)
-
-        rect
-        .enter()
-        .append("rect") // Add a new rect for each new elements
-        .merge(rect) // get the already existing elements as well
-        .transition() // and apply changes to all of them
-        .duration(1000)
-        .attr("x", function(d) { return x(d.key); })
-        .attr("y", function(d) { return y(d.value); })
-        .attr("width", x.bandwidth())
-        .attr("height", function(d) { return height - y(d.value); })
-        .attr("fill", "#69b3a2")
-
-        barContext.svg = svg;
-        barContext.xAxis = xAxis;
-        barContext.yAxis = yAxis;
-        barContext.data = data;
     }
 
     removeElement(stats) {
         // ---- remove the first element of array  
         let data = [];
-        let count = 1;
+        let count = 0;
         for (const key in stats) {
-            data.push({key: count, value: this.props.stats[key].wpm});
+            data.push({key: count, value: stats[key].wpm});
             count += 1;
         }
 
         data.shift();
-        count += 1;
-        
-        data.push({key: count, value: this.props.stats[this.props.stats.length - 1].wpm});
-        
+        data.push({key: data[data.length - 1].key + 1, value: this.props.stats[this.props.stats.length - 1].wpm})
+
         let svg = barContext.svg;
         const margin = this.state.margin;
         const height = this.state.height - margin.top - margin.bottom; 
@@ -187,10 +132,10 @@ class LastTenRuns extends Component {
         // Update the Y axis
         x.domain(d3.range(data.length));
         y.domain([0, d3.max(data, function(d) { return d.value; })]);
+        yAxis.transition().duration(1000).call(d3.axisLeft(y));
 
         var bars = svg.selectAll("rect")
             .data(data, key);	
-            
         
         // ---- select exiting elements
         bars.exit()
@@ -203,7 +148,7 @@ class LastTenRuns extends Component {
         bars
         .enter()
         .append('rect')
-        .attr("x", width)
+        .attr("x", width + margin.right)
         .attr("y", function(d) {
             return y(d.value);
         })
@@ -218,8 +163,8 @@ class LastTenRuns extends Component {
         .attr("x", function(d, i) {
             return x(i);
         })
-
-        console.log(x.bandwidth())
+        .attr("y", function(d) { return y(d.value); })
+        .attr("height", function(d) { return height - y(d.value); })
 
     }
         
