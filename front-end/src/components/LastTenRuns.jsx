@@ -20,9 +20,10 @@ class LastTenRuns extends Component {
             this.removeElement(prevProps.stats);
         }
     }
-        
+
     drawChart() {
         barContext.drawn = true;
+        barContext.count = 0;
 
         let data = [];
         let count = 0;
@@ -46,37 +47,35 @@ class LastTenRuns extends Component {
         .range([ 0, width ])
         .padding(0.2);
         var xAxis = svg.append("g")
-        .attr("class", "xAaxis")
+        .attr("class", "xAaxis grid")
         .attr("ref", "xAaxis")
-        .attr("transform", "translate(0," + height + ")")
-
+        .attr("transform", "translate(0," + height + ")");
         // Initialize the Y axis
         var y = d3.scaleLinear()
         .range([ height, 0]);
         var yAxis = svg.append("g")
-        .attr("class", "yAxis")
-        .attr("ref", "yAxis")
+        .attr("class", "yAxis grid")
+        .attr("ref", "yAxis");
         
         // Update the X axis
-        x.domain(data.map(function(d) { return d.key; }))
-        xAxis.call(d3.axisBottom(x))
+        x.domain(data.map(function(d) { return d.key; }));
+        xAxis.call(d3.axisBottom(x).tickValues([]));
 
         // Update the Y axis
         y.domain([0, d3.max(data, function(d) { return d.value }) ]);
-        yAxis.transition().duration(1000).call(d3.axisLeft(y));
+        yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
 
         // Create the u variable
-        var rect = svg.selectAll("rect")
-        .data(data)
+        var bars = svg.selectAll("rect")
+        .data(data);
 
-        rect
+        bars
         .enter()
         .append("rect") // Add a new rect for each new elements
-        .merge(rect) // get the already existing elements as well
+        .merge(bars) // get the already existing elements as well
         .transition() // and apply changes to all of them
         .duration(1000)
         .attr("x", function(d) { return x(d.key); })
-        .attr("y", function(d) { return y(d.value); })
         .attr("width", x.bandwidth())
         .attr("y",  d => { return height; })
         .attr("height", 0)
@@ -87,7 +86,38 @@ class LastTenRuns extends Component {
             })
         .attr("y",  d => { return y(d.value); })
         .attr("height",  d => { return height - y(d.value); })
-        .attr("fill", "#69b3a2")        
+        .attr("fill", "#69b3a2");      
+
+        var key = function(d) {
+            return d.key;
+        };
+
+        var texts = svg.selectAll("text")
+					   .data(data, key)		
+  
+  		texts
+            .enter()
+            .append("text")
+            .merge(texts)
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "15px")
+            .attr("fill", "white")
+            .text(function(d){return d.value;})
+            .transition() // and apply changes to all of them
+            .duration(1000)
+            .attr("x", function(d, i) {
+                    return x(i) + x.bandwidth() / 2;
+            })
+            .style("text-anchor", "middle")
+            .attr("y",  d => { return height; })
+            .attr("height", 0)
+                .transition()
+                .duration(750)
+                .delay(function (d, i) {
+                    return i * 100;
+                })
+            .attr("y",  d => { return y(d.value) + 20; })
+            .attr("height",  d => { return height - y(d.value); });
 
         barContext.svg = svg;
         barContext.xAxis = xAxis;
@@ -98,14 +128,14 @@ class LastTenRuns extends Component {
     removeElement(stats) {
         // ---- remove the first element of array  
         let data = [];
-        let count = 0;
+        let count = barContext.count;
         for (const key in stats) {
             data.push({key: count, value: stats[key].wpm});
             count += 1;
         }
 
         data.shift();
-        data.push({key: data[data.length - 1].key + 1, value: this.props.stats[this.props.stats.length - 1].wpm})
+        data.push({key: data[data.length - 1].key + 1, value: this.props.stats[this.props.stats.length - 1].wpm});
 
         let svg = barContext.svg;
         const margin = this.state.margin;
@@ -122,7 +152,6 @@ class LastTenRuns extends Component {
         .padding(0.2);
         var y = d3.scaleLinear()
         .range([ height, 0]);
-        var xAxis = barContext.xAxis;
 
         // Initialize the Y axis
         
@@ -132,7 +161,7 @@ class LastTenRuns extends Component {
         // Update the Y axis
         x.domain(d3.range(data.length));
         y.domain([0, d3.max(data, function(d) { return d.value; })]);
-        yAxis.transition().duration(1000).call(d3.axisLeft(y));
+        yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
 
         var bars = svg.selectAll("rect")
             .data(data, key);	
@@ -166,6 +195,7 @@ class LastTenRuns extends Component {
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
 
+        barContext.count = barContext.count + 1;
     }
         
     render(){
