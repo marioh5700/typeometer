@@ -12,12 +12,6 @@ code {
     monospace;
 }
 
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 2px;
-}
-
 .grid line {
   stroke: lightgrey;
   stroke-opacity: 0.7;

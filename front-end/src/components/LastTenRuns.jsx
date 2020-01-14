@@ -17,7 +17,7 @@ class LastTenRuns extends Component {
         if (prevProps.stats.length === 0 && this.props.stats.length !== 0) {
             this.drawChart();
         } else if (this.props.stats.length !== 0 && prevProps.stats !== this.props.stats) {
-            this.removeElement(prevProps.stats);
+            this.updateChart(prevProps.stats);
         }
     }
 
@@ -42,7 +42,6 @@ class LastTenRuns extends Component {
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-        // Initialize the X axis
         var x = d3.scaleBand()
         .range([ 0, width ])
         .padding(0.2);
@@ -50,30 +49,27 @@ class LastTenRuns extends Component {
         .attr("class", "xAaxis grid")
         .attr("ref", "xAaxis")
         .attr("transform", "translate(0," + height + ")");
-        // Initialize the Y axis
+
         var y = d3.scaleLinear()
         .range([ height, 0]);
         var yAxis = svg.append("g")
         .attr("class", "yAxis grid")
         .attr("ref", "yAxis");
         
-        // Update the X axis
         x.domain(data.map(function(d) { return d.key; }));
         xAxis.call(d3.axisBottom(x).tickValues([]));
 
-        // Update the Y axis
         y.domain([0, d3.max(data, function(d) { return d.value }) ]);
         yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
 
-        // Create the u variable
         var bars = svg.selectAll("rect")
         .data(data);
 
         bars
         .enter()
-        .append("rect") // Add a new rect for each new elements
-        .merge(bars) // get the already existing elements as well
-        .transition() // and apply changes to all of them
+        .append("rect") 
+        .merge(bars) 
+        .transition() 
         .duration(1000)
         .attr("x", function(d) { return x(d.key); })
         .attr("width", x.bandwidth())
@@ -92,7 +88,7 @@ class LastTenRuns extends Component {
             return d.key;
         };
 
-        var texts = svg.selectAll("text")
+        var texts = svg.selectAll('.barText')
 					   .data(data, key)		
   
   		texts
@@ -102,6 +98,7 @@ class LastTenRuns extends Component {
         .attr("font-family", "sans-serif")
         .attr("font-size", "20px")
         .attr("fill", "white")
+        .attr("class", "barText")
         .text(function(d){return d.value;})
         .transition() // and apply changes to all of them
         .duration(1000)
@@ -125,7 +122,7 @@ class LastTenRuns extends Component {
 
     }
 
-    removeElement(stats) {
+    updateChart(stats) {
         // ---- remove the first element of array  
         let data = [];
         let count = barContext.count;
@@ -146,42 +143,25 @@ class LastTenRuns extends Component {
             return d.key;
         };
 
-        // Initialize the X axis
         var x = d3.scaleBand()
         .range([ 0, width ])
         .padding(0.2);
         var y = d3.scaleLinear()
         .range([ height, 0]);
 
-        // Initialize the Y axis
         
         var yAxis = barContext.yAxis;
-        // Update the X axis
 
-        // Update the Y axis
         x.domain(d3.range(data.length));
-        // Update the Y axis
         y.domain([0, d3.max(data, function(d) { return d.value }) ]);
         yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
 
         var bars = svg.selectAll("rect")
             .data(data, key);	
         
-        // ---- select exiting elements
         bars.exit()
             .transition()
             .duration(500)
-        //      move left a bandwidth to hide
-        .attr("width", 0) 
-        .remove();
-
-        var texts = svg.selectAll("text")
-            .data(data, key);
-
-        texts.exit()
-        .transition()
-        .duration(500)
-        //      move left a bandwidth to hide
         .attr("width", 0) 
         .remove();
 
@@ -206,6 +186,15 @@ class LastTenRuns extends Component {
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
 
+        var texts = svg.selectAll('.barText')
+            .data(data, key);
+
+        texts.exit()
+        .transition()
+        .duration(500)
+        .attr("width", 0) 
+        .remove();
+
         texts
         .enter()
         .append("text")
@@ -218,10 +207,11 @@ class LastTenRuns extends Component {
         .attr("font-family", "sans-serif")
         .attr("font-size", "20px")
         .attr("fill", "white")
+        .attr("class", "barText")
         .merge(texts)
         .text(function(d){return d.value;})
         .style("text-anchor", "middle")
-        .transition() // and apply changes to all of them
+        .transition()
         .duration(500)
         .attr("x", function(d, i) {
             return x(i) + x.bandwidth() / 2;
