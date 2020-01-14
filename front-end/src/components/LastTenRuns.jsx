@@ -96,28 +96,28 @@ class LastTenRuns extends Component {
 					   .data(data, key)		
   
   		texts
-            .enter()
-            .append("text")
-            .merge(texts)
-            .attr("font-family", "sans-serif")
-            .attr("font-size", "15px")
-            .attr("fill", "white")
-            .text(function(d){return d.value;})
-            .transition() // and apply changes to all of them
-            .duration(1000)
-            .attr("x", function(d, i) {
-                    return x(i) + x.bandwidth() / 2;
+        .enter()
+        .append("text")
+        .merge(texts)
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "20px")
+        .attr("fill", "white")
+        .text(function(d){return d.value;})
+        .transition() // and apply changes to all of them
+        .duration(1000)
+        .attr("x", function(d, i) {
+                return x(i) + x.bandwidth() / 2;
+        })
+        .style("text-anchor", "middle")
+        .attr("y",  d => { return height; })
+        .attr("height", 0)
+            .transition()
+            .duration(750)
+            .delay(function (d, i) {
+                return i * 100;
             })
-            .style("text-anchor", "middle")
-            .attr("y",  d => { return height; })
-            .attr("height", 0)
-                .transition()
-                .duration(750)
-                .delay(function (d, i) {
-                    return i * 100;
-                })
-            .attr("y",  d => { return y(d.value) + 20; })
-            .attr("height",  d => { return height - y(d.value); });
+        .attr("y",  d => { return y(d.value) + 25; })
+        .attr("height",  d => { return height - y(d.value); });
 
         barContext.svg = svg;
         barContext.xAxis = xAxis;
@@ -160,7 +160,8 @@ class LastTenRuns extends Component {
 
         // Update the Y axis
         x.domain(d3.range(data.length));
-        y.domain([0, d3.max(data, function(d) { return d.value; })]);
+        // Update the Y axis
+        y.domain([0, d3.max(data, function(d) { return d.value }) ]);
         yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
 
         var bars = svg.selectAll("rect")
@@ -170,6 +171,16 @@ class LastTenRuns extends Component {
         bars.exit()
             .transition()
             .duration(500)
+        //      move left a bandwidth to hide
+        .attr("width", 0) 
+        .remove();
+
+        var texts = svg.selectAll("text")
+            .data(data, key);
+
+        texts.exit()
+        .transition()
+        .duration(500)
         //      move left a bandwidth to hide
         .attr("width", 0) 
         .remove();
@@ -195,7 +206,32 @@ class LastTenRuns extends Component {
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
 
+        texts
+        .enter()
+        .append("text")
+        .attr("x", width + margin.right + x.bandwidth() / 2)
+        .attr("y", function(d) {
+            return y(d.value) + 25;
+        })
+        .attr("height", function(d) { return height - y(d.value); })
+        .style("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "20px")
+        .attr("fill", "white")
+        .merge(texts)
+        .text(function(d){return d.value;})
+        .style("text-anchor", "middle")
+        .transition() // and apply changes to all of them
+        .duration(500)
+        .attr("x", function(d, i) {
+            return x(i) + x.bandwidth() / 2;
+        })
+        .attr("y", function(d) { return y(d.value) + 25; })
+        .attr("height", function(d) { return height - y(d.value); })
+
         barContext.count = barContext.count + 1;
+        barContext.svg = svg;
+        barContext.yAxis = yAxis;
     }
         
     render(){

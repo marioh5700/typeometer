@@ -15,7 +15,7 @@ class TypingModule extends Component {
         content: '',
         incorrect: false,
         started: false,
-        seconds: 30,
+        seconds: 10,
         charCount: 0,
         wpm: 0,
         stats: []};

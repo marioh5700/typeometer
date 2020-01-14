@@ -28,12 +28,6 @@ code {
   stroke-width: 0;
 }
 
-.svg text {
-  fill: black;
-  font: 10px sans-serif;
-  text-anchor: end;
-}
-
 .wordContainer {
   display:inline-block;
   margin:2px;
