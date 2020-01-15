@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import TypingModule from './components/TypingModule';
+import MainComponent from './components/MainComponent';
 
 ReactDOM.render(
 <div>
-    <TypingModule/>
+    <MainComponent/>
 </div>, 
 document.getElementById('root'));
 

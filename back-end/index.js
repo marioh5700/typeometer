@@ -1,3 +1,4 @@
+const pwhash = require("./pwhash.js");
 const Joi = require('joi');
 const express = require('express');
 var app = express();
@@ -54,6 +55,24 @@ app.post('/postrun', (req, res) => {
             });
         });
     });
+});
+
+app.post('/newuser', (req, res) => {
+    let sql = `SELECT username FROM userbase WHERE username="${req.body.username}"`;
+    db.all(sql, [], (err, userObj) => {
+        if (userObj.length > 0) {
+            res.send('Username already taken');
+        } else {
+            let sql = `INSERT INTO userbase (username, hash) VALUES (?, ?)`;
+            db.run(sql, [req.body.username, pwhash.getHashedPass(req.body.password)], (err) => {
+                if (err) {
+                    return console.log(err.message);
+                }
+                res.send('Success');
+            });
+        }
+    });
+
 });
 
 //PORT
