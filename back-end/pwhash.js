@@ -8,3 +8,9 @@ module.exports.getHashedPass = function getHashedPass(password) {
         return hash;
     }
 };
+
+module.exports.compareHash = function compareHash(passwordAttempt, hash){
+    let response = bcrypt.compareSync(passwordAttempt, hash);
+    
+    return response;
+};

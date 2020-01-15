@@ -27,7 +27,7 @@ code {
   margin:2px;
 }
 
-#wordGeneratorContainer, #wordGeneratorContainerIncorrect, #typingSpaceContainer, #timerContainer {
+#formContainer, #wordGeneratorContainer, #wordGeneratorContainerIncorrect, #typingSpaceContainer, #timerContainer {
   width:80%;
   margin:auto;
 }
@@ -35,5 +35,4 @@ code {
 #wordGeneratorContainerIncorrect :first-child {
   background-color:red;
 }
-
 

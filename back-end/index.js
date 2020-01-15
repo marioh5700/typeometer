@@ -1,12 +1,19 @@
 const pwhash = require("./pwhash.js");
 const Joi = require('joi');
-const express = require('express');
+var express = require('express');
 var app = express();
+var session = require('express-session');
 var cors = require('cors');
 var sqlite3 = require('sqlite3').verbose();
 
+app.use(session({
+    secret: 'not@very@inspiring@:(',
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(express.json());
 app.use(cors({
+    credentials: true,
     origin: 'http://localhost:3000'
 }));
 
@@ -57,7 +64,36 @@ app.post('/postrun', (req, res) => {
     });
 });
 
-app.post('/newuser', (req, res) => {
+app.post('/login', (req, res) => {
+    let sql = `SELECT username, hash FROM userbase WHERE username="${req.body.username}"`;
+    db.get(sql, [], (err, userObj) => {
+        if (userObj.length > 0) {
+            res.send('Incorrect Username or Password');
+        } else {
+            let match = pwhash.compareHash(req.body.password, userObj.hash);
+            if (match) {
+                req.session.username = userObj.username;
+            }
+            res.send(match);
+        }
+    });
+
+});
+
+app.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.send(false);
+});
+
+app.get('/checkLogged', function (req, res) {
+    if (typeof req.session.userId === 'undefined') {
+        res.send(false);
+    } else {
+        res.send(true);
+    }
+});
+
+app.post('/register', (req, res) => {
     let sql = `SELECT username FROM userbase WHERE username="${req.body.username}"`;
     db.all(sql, [], (err, userObj) => {
         if (userObj.length > 0) {
