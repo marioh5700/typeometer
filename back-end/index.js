@@ -9,7 +9,8 @@ var sqlite3 = require('sqlite3').verbose();
 app.use(session({
     secret: 'not@very@inspiring@:(',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    //cookie: {maxAge: 1800000}
 }));
 app.use(express.json());
 app.use(cors({
@@ -86,7 +87,8 @@ app.get('/logout', function (req, res) {
 });
 
 app.get('/checkLogged', function (req, res) {
-    if (typeof req.session.userId === 'undefined') {
+    console.log(req.session.username);
+    if (typeof req.session.username === 'undefined') {
         res.send(false);
     } else {
         res.send(true);

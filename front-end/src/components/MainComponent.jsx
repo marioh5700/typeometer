@@ -57,7 +57,9 @@ class MainComponent extends Component {
     }
 
     checkLogged() {
-        fetch('http://localhost:5000/checkLogged')
+        fetch('http://localhost:5000/checkLogged', {
+            credentials: 'include'
+        })
         .then(res => res.json())
         .then((results) => {
             this.setState({loggedIn: results});
