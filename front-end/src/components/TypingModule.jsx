@@ -15,10 +15,11 @@ class TypingModule extends Component {
         content: '',
         incorrect: false,
         started: false,
-        seconds: 30,
+        seconds: 5,
         charCount: 0,
         wpm: 0,
-        stats: []};
+        stats: [],
+        tempValues: []};
         
         this.randomiseWords = this.randomiseWords.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -28,6 +29,7 @@ class TypingModule extends Component {
         this.characterTyped = this.characterTyped.bind(this);
         this.resetTimer = this.resetTimer.bind(this);
         this.getData = this.getData.bind(this);
+        this.submitRun = this.submitRun.bind(this);
         
     }    
 
@@ -43,16 +45,50 @@ class TypingModule extends Component {
     }
 
     getData() {
-        fetch('http://localhost:5000/')
-        .then(res => res.json())
-        .then((results) => {
-            this.setState({stats: results});
-        })
+        if (this.props.loggedIn){
+            fetch('http://localhost:5000/', {
+                credentials: 'include'
+            })
+            .then(res => res.json())
+            .then((results) => {
+                this.setState({stats: results});
+            })
+        } else {
+            this.setState({stats: this.state.tempValues.slice()});
+        }
+    }
+
+    submitRun() {
+        if (this.props.loggedIn) {
+            let params = {
+                wpm: Math.round(this.state.wpm)
+            };
+
+            fetch('http://localhost:5000/postrun', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(params)
+            })
+            .then(
+                this.getData()
+            );
+        } else {
+            let data = this.state.tempValues;
+            data.push({wpm: Math.round(this.state.wpm)});
+            if (data.length === 11) {
+                data.shift();
+            }
+            this.setState({tempValues: data}, () => {
+                this.getData();
+            }); 
+        }
     }
 
     componentDidMount() {
         this.randomiseWords();
-        this.getData()
+        this.getData();
     }
 
     handleChange(contentChild){
@@ -113,7 +149,7 @@ class TypingModule extends Component {
                         incorrect:false,
                         charCount: 0,
                         started: false,
-                        seconds: 30,
+                        seconds: 5,
                         wpm: 0})
         this.randomiseWords();
     }
@@ -125,6 +161,8 @@ class TypingModule extends Component {
         let seconds = this.state.seconds;
         let wpm = this.state.wpm;
         let stats = this.state.stats;
+        let loggedIn = this.props.loggedIn;
+
         return (
             <div id='typingModuleContainer'>
                 <WordGenerator
@@ -140,7 +178,9 @@ class TypingModule extends Component {
                 characterTyped={this.characterTyped}
                 startTimer={this.startTimer}
                 resetTimer={this.resetTimer}
-                getData={this.getData}/>
+                getData={this.getData}
+                submitRun={this.submitRun}
+                loggedIn={loggedIn}/>
             </div>
         )
     }

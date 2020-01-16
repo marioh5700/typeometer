@@ -4,9 +4,10 @@ import TypingModule from './TypingModule';
 class MainComponent extends Component {
     constructor(props){
         super(props);
-        this.state = {loggedIn: false,
-                    usernameValue: '',
-                    passwordValue: ''};
+        this.state = {
+        loggedIn: false,
+        usernameValue: '',
+        passwordValue: ''};
         
         this.inputChange = this.inputChange.bind(this);
         this.login = this.login.bind(this);
@@ -67,38 +68,41 @@ class MainComponent extends Component {
     }
 
     render() {
+        let loggedIn = this.state.loggedIn;
+        let navBar = ''
         if (this.state.loggedIn === false) {
-            return (
-                <div>
-                    <form id='formContainer' action="">
+            navBar =    <form id='formContainer' action="">
+                            <button
+                            type="button"
+                            onClick={this.login}
+                            >Login</button>
+                            <input name='usernameValue'
+                            autoComplete="username"
+                            type="text"
+                            onChange={this.inputChange}
+                            />
+                            <input name="passwordValue"
+                            autoComplete="current-password"
+                            onChange={this.inputChange}
+                            type={"password"}
+                            />
+                        </form>
+        } else {
+            navBar = <form id='formContainer' action=''>
                         <button
                         type="button"
-                        onClick={this.login}
-                        >Login</button>
-                        <input name='usernameValue'
-                        autoComplete="username"
-                        type="text"
-                        onChange={this.inputChange}
-                        />
-                        <input name="passwordValue"
-                        autoComplete="current-password"
-                        onChange={this.inputChange}
-                        type={"password"}
-                        />
+                        onClick={this.logout}
+                        >Logout</button>                
                     </form>
-                    <TypingModule/> 
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <button
-                    onClick={this.logout}
-                    >Logout</button>                
-                    <TypingModule/> 
-                </div>
-            )
         }
+
+        return (
+            <div>
+                {navBar}
+                <TypingModule
+                loggedIn={loggedIn}/> 
+            </div>
+        )
     }
 }
 

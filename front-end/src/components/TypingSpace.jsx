@@ -7,29 +7,11 @@ class TypingSpace extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.resetEvent = this.resetEvent.bind(this);
-        this.submitRun = this.submitRun.bind(this);
     }   
-    
-    submitRun() {
-        let params = {
-            wpm: Math.round(this.props.wpm)
-          };
-
-        fetch('http://localhost:5000/postrun', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(params)
-        })
-        .then(
-            this.props.getData
-        );
-    }
 
     componentDidUpdate(prevProps) {
         if ((this.props.seconds === 0) && (this.props.seconds !== prevProps.seconds)) {
-            this.submitRun()
+            this.props.submitRun();
         }
     }
 

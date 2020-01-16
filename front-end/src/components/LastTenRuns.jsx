@@ -11,12 +11,15 @@ class LastTenRuns extends Component {
             width: 800,
             height: 600,
         }
+
+        this.drawChart = this.drawChart.bind(this);
+        this.updateChart = this.updateChart.bind(this);
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.stats.length === 0 && this.props.stats.length !== 0) {
+        if (!barContext.drawn && this.props.stats.length === 0) {
             this.drawChart();
-        } else if (this.props.stats.length !== 0 && prevProps.stats !== this.props.stats) {
+        } else if (prevProps.stats !== this.props.stats) {
             this.updateChart(prevProps.stats);
         }
     }
@@ -56,11 +59,19 @@ class LastTenRuns extends Component {
         .attr("class", "yAxis grid")
         .attr("ref", "yAxis");
         
-        x.domain(data.map(function(d) { return d.key; }));
-        xAxis.call(d3.axisBottom(x).tickValues([]));
+        if (data.length !== 0) {
+            x.domain(data.map(function(d) { return d.key; }));
+            xAxis.call(d3.axisBottom(x).tickValues([]));
 
-        y.domain([0, d3.max(data, function(d) { return d.value }) ]);
-        yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
+            y.domain([0, d3.max(data, function(d) { return d.value }) ]);
+            yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
+        } else {
+            x.domain(10);
+            xAxis.call(d3.axisBottom(x).tickValues([]));
+
+            y.domain([0, 50 ]);
+            yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
+        }
 
         var bars = svg.selectAll("rect")
         .data(data);
@@ -123,16 +134,25 @@ class LastTenRuns extends Component {
     }
 
     updateChart(stats) {
-        // ---- remove the first element of array  
         let data = [];
         let count = barContext.count;
-        for (const key in stats) {
-            data.push({key: count, value: stats[key].wpm});
-            count += 1;
+        if (stats.length !== 0) {
+            for (const key in stats) {
+                data.push({key: count, value: stats[key].wpm});
+                count += 1;
+            }
         }
 
-        data.shift();
-        data.push({key: data[data.length - 1].key + 1, value: this.props.stats[this.props.stats.length - 1].wpm});
+        if (data.length > 0) {
+            data.push({key: data[data.length - 1].key + 1, value: this.props.stats[this.props.stats.length - 1].wpm});
+        } else {
+            data.push({key: 0, value: this.props.stats[0].wpm});
+        }
+
+        if (data.length === 11) {
+            data.shift();
+            barContext.count = barContext.count + 1;
+        }
 
         let svg = barContext.svg;
         const margin = this.state.margin;
@@ -180,6 +200,7 @@ class LastTenRuns extends Component {
         .merge(bars)
         .transition()
         .duration(500)
+        .attr("width", x.bandwidth())
         .attr("x", function(d, i) {
             return x(i);
         })
@@ -219,7 +240,6 @@ class LastTenRuns extends Component {
         .attr("y", function(d) { return y(d.value) + 25; })
         .attr("height", function(d) { return height - y(d.value); })
 
-        barContext.count = barContext.count + 1;
         barContext.svg = svg;
         barContext.yAxis = yAxis;
     }
