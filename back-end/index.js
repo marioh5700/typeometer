@@ -87,7 +87,6 @@ app.get('/logout', function (req, res) {
 });
 
 app.get('/checkLogged', function (req, res) {
-    console.log(req.session.username);
     if (typeof req.session.username === 'undefined') {
         res.send(false);
     } else {
