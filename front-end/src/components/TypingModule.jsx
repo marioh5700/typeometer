@@ -33,6 +33,26 @@ class TypingModule extends Component {
         
     }    
 
+    componentDidMount() {
+        this.randomiseWords();
+        this.getData();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.loggedIn !== this.props.loggedIn && this.props.loggedIn === true) {
+            this.setState({stats: []}, () => {
+                this.setState({tempValues: []}, () => {
+                    this.getData();
+                });
+            });
+        } else if (prevProps.loggedIn === true && this.props.loggedIn === false) {
+            this.setState({stats: [], tempValues: []}, () => {
+                console.log(this.state.stats);  
+                this.getData();
+            });
+        }
+    }
+
     randomiseWords() {
         let tempList = []
         for (let i = 0; i < 50; i++) {
@@ -66,6 +86,7 @@ class TypingModule extends Component {
 
             fetch('http://localhost:5000/postrun', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                 'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -84,11 +105,6 @@ class TypingModule extends Component {
                 this.getData();
             }); 
         }
-    }
-
-    componentDidMount() {
-        this.randomiseWords();
-        this.getData();
     }
 
     handleChange(contentChild){

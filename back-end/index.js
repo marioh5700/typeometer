@@ -37,10 +37,10 @@ app.get('/', (req, res) => {
 });
 
 app.post('/postrun', (req, res) => {
-    let sql = `INSERT INTO wpm_history (wpm) 
-            VALUES (?)`;
+    let sql = `INSERT INTO wpm_history (wpm, username) 
+            VALUES (?, ?)`;
     
-    db.run(sql, [req.body.wpm], (err) => {
+    db.run(sql, [req.body.wpm, req.session.username], (err) => {
         if (err) {
             return console.log(err.message);
           }
@@ -51,16 +51,22 @@ app.post('/postrun', (req, res) => {
         let deleteNumber = 0;
 
         db.all(sql, [], (err, countObj) => {
-            deleteNumber = countObj[0][Object.keys(countObj[0])[0]] - 10;
+            console.log(countObj);
+            if (countObj[0][Object.keys(countObj[0])[0]] > 10) {
+                deleteNumber = countObj[0][Object.keys(countObj[0])[0]] - 10;
+            
 
-            sql = "DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history order by id LIMIT " + deleteNumber + ")";
+                sql = "DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history order by id LIMIT " + deleteNumber + ")";
 
-            db.run(sql, [], function(err) {
-                if (err) {
-                return console.error(err.message);
-                }
-                console.log(`Row(s) deleted ${this.changes}`);
-            });
+                db.run(sql, [], function(err) {
+                    if (err) {
+                    return console.error(err.message);
+                    }
+                    console.log(`Row(s) deleted ${this.changes}`);
+                });
+            } else {
+                console.log(`No rows deleted`);
+            }
         });
     });
 });

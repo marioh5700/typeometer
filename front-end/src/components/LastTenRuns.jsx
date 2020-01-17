@@ -14,17 +14,29 @@ class LastTenRuns extends Component {
 
         this.drawChart = this.drawChart.bind(this);
         this.updateChart = this.updateChart.bind(this);
+        this.destroyChart = this.destroyChart.bind(this);
     }
 
     componentDidUpdate(prevProps) {
-        if (!barContext.drawn && this.props.stats.length === 0) {
-            this.drawChart();
-        } else if (prevProps.stats !== this.props.stats) {
+        if (prevProps.loggedIn !== this.props.loggedIn) {
+            this.destroyChart();
+            this.drawChart(prevProps.stats);
+        } else if (!barContext.drawn && this.props.stats.length === 0) {
+            this.drawChart(prevProps.stats);
+        } else if (prevProps.stats !== this.props.stats && this.props.stats.length > 0) {
             this.updateChart(prevProps.stats);
+        } else if (prevProps.stats.length > 0 && this.props.stats.length === 0) {
+            this.destroyChart();
+            this.drawChart(prevProps.stats);
         }
     }
 
-    drawChart() {
+    destroyChart() {
+        barContext.svg.selectAll("*").remove();
+        barContext.drawn = false;
+    }
+
+    drawChart(stats) {
         barContext.drawn = true;
         barContext.count = 0;
 
@@ -33,6 +45,10 @@ class LastTenRuns extends Component {
         for (const key in this.props.stats) {
             data.push({key: count, value: this.props.stats[key].wpm});
             count += 1;
+        }
+
+        if (stats.length > this.props.stats.length) {
+            data = [];
         }
 
         const margin = this.state.margin;
@@ -142,9 +158,16 @@ class LastTenRuns extends Component {
                 count += 1;
             }
         }
-
-        if (data.length > 0) {
+        console.log(data);
+        if (data.length > 0 && this.props.stats.length > 0) {
             data.push({key: data[data.length - 1].key + 1, value: this.props.stats[this.props.stats.length - 1].wpm});
+        } else if (stats.length === 0 && this.props.stats.length > 1) {
+            for (const key in this.props.stats) {
+                data.push({key: count, value: this.props.stats[key].wpm});
+                count += 1;
+            }
+        } else if (stats.length > this.props.stats.length) {
+            data = [];
         } else {
             data.push({key: 0, value: this.props.stats[0].wpm});
         }

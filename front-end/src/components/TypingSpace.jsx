@@ -40,6 +40,7 @@ class TypingSpace extends Component {
         let seconds = this.props.seconds;
         let wpm = Math.round(this.props.wpm);
         let stats = this.props.stats;
+        let loggedIn = this.props.loggedIn;
 
         return (
             <div id='typingSpaceContainer'>
@@ -60,7 +61,8 @@ class TypingSpace extends Component {
                 </div>
                 <LastTenRuns
                 seconds={seconds}
-                stats={stats}/>
+                stats={stats}
+                loggedIn={loggedIn}/>
             </div>
         )
     }
