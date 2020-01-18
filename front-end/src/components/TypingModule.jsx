@@ -92,9 +92,9 @@ class TypingModule extends Component {
                 },
                 body: JSON.stringify(params)
             })
-            .then(
+            .then((results) => {
                 this.getData()
-            );
+            });
         } else {
             let data = this.state.tempValues;
             data.push({wpm: Math.round(this.state.wpm)});

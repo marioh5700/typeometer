@@ -45,8 +45,6 @@ app.post('/postrun', (req, res) => {
             return console.log(err.message);
           }
 
-        res.send(`You sent: ${req.body.wpm}`);
-
         sql = `SELECT COUNT(*) FROM wpm_history AS count`;
         let deleteNumber = 0;
 
@@ -68,6 +66,7 @@ app.post('/postrun', (req, res) => {
                 console.log(`No rows deleted`);
             }
         });
+        res.send(`You sent: ${req.body.wpm}`);
     });
 });
 
