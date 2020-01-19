@@ -7,12 +7,14 @@ class MainComponent extends Component {
         this.state = {
         loggedIn: false,
         usernameValue: '',
-        passwordValue: ''};
+        passwordValue: '',
+        popup: false};
         
         this.inputChange = this.inputChange.bind(this);
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.register = this.register.bind(this);
+        this.loginPopup = this.loginPopup.bind(this);
     }
 
     componentDidMount() {
@@ -21,6 +23,16 @@ class MainComponent extends Component {
 
     inputChange(event) {
         this.setState({[event.target.name]: event.target.value})
+    }
+
+    loginPopup() {
+        if (this.state.popup === true) {
+            document.getElementById('id01').style.display='none';
+            this.setState({popup: false});
+        } else {
+            document.getElementById('id01').style.display='block';
+            this.setState({popup: true});
+        }
     }
 
     register() {
@@ -58,7 +70,8 @@ class MainComponent extends Component {
         })
         .then(res => res.json())
         .then((response) => {
-            this.setState({loggedIn: response});
+            this.setState({loggedIn: response,
+            popup: false});
         });
     }
 
@@ -86,27 +99,42 @@ class MainComponent extends Component {
         let loggedIn = this.state.loggedIn;
         let navBar = ''
         if (this.state.loggedIn === false) {
-            navBar =    <form id='formContainer' action="">
-                            <button
-                            type="button"
-                            onClick={this.login}
-                            >Login</button>
-                            <button
-                            type="button"
-                            onClick={this.register}
-                            >Register</button>
-                            <input name='usernameValue'
-                            autoComplete="username"
-                            type="text"
-                            onChange={this.inputChange}
-                            />
-                            
-                            <input name="passwordValue"
-                            autoComplete="current-password"
-                            onChange={this.inputChange}
-                            type={"password"}
-                            />
-                        </form>
+            navBar =    <div id='formContainer'>
+                            <button onClick={this.loginPopup}>Login</button>
+
+                            <div id="id01" className="modal">
+                                <span onClick={this.loginPopup}
+                                className="close" title="Close Modal">&times;</span>
+
+                                    <form className="modal-content animate formContainer" action="/action_page.php">
+                                        <div className="imgcontainer">
+                                            <img src="img_avatar2.png" alt="Avatar" className="avatar"></img>
+                                        </div>
+
+                                        <div className="container">
+                                            <label htmlFor="usernameValue"><b>Username</b></label>
+                                            <input placeholder="Enter Username" name='usernameValue'
+                                            autoComplete="username"
+                                            type="text"
+                                            onChange={this.inputChange} required></input>
+
+                                            <label htmlFor="passwordValue"><b>Password</b></label>
+                                            <input name="passwordValue"
+                                            autoComplete="current-password"
+                                            onChange={this.inputChange}
+                                            type={"password"}></input>
+
+                                            <button type="button"
+                                            onClick={this.login}>Login</button>
+                                        </div>
+
+                                        <div className="container" id="cancelContainer">
+                                            <button type="button" onClick={this.loginPopup} className="cancelbtn">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                        </div>
+
         } else {
             navBar = <form id='formContainer' action=''>
                         <button
@@ -120,7 +148,7 @@ class MainComponent extends Component {
             <div>
                 {navBar}
                 <TypingModule
-                loggedIn={loggedIn}/> 
+                loggedIn={loggedIn}/>                 
             </div>
         )
     }
