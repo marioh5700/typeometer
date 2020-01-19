@@ -18,9 +18,14 @@ class LastTenRuns extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        //logged in/out
         if (prevProps.loggedIn !== this.props.loggedIn) {
             this.destroyChart();
             this.drawChart(prevProps.stats);
+        //
+        } else if ((typeof prevProps.stats === 'undefined' || prevProps.stats.length === 0) && this.props.stats.length > 0) {
+            this.destroyChart()
+            this.drawChart(prevProps.stats)
         } else if (!barContext.drawn && this.props.stats.length === 0) {
             this.drawChart(prevProps.stats);
         } else if (prevProps.stats !== this.props.stats && this.props.stats.length > 0) {
@@ -42,13 +47,12 @@ class LastTenRuns extends Component {
 
         let data = [];
         let count = 0;
-        for (const key in this.props.stats) {
-            data.push({key: count, value: this.props.stats[key].wpm});
-            count += 1;
-        }
 
-        if (stats.length > this.props.stats.length) {
-            data = [];
+        if (stats.length <= this.props.stats.length) {
+            for (const key in this.props.stats) {
+                data.push({key: count, value: this.props.stats[key].wpm});
+                count += 1;
+            }
         }
 
         const margin = this.state.margin;
@@ -152,20 +156,16 @@ class LastTenRuns extends Component {
     updateChart(stats) {
         let data = [];
         let count = barContext.count;
+
         if (stats.length !== 0) {
             for (const key in stats) {
                 data.push({key: count, value: stats[key].wpm});
                 count += 1;
             }
         }
-        console.log(data);
+
         if (data.length > 0 && this.props.stats.length > 0) {
             data.push({key: data[data.length - 1].key + 1, value: this.props.stats[this.props.stats.length - 1].wpm});
-        } else if (stats.length === 0 && this.props.stats.length > 1) {
-            for (const key in this.props.stats) {
-                data.push({key: count, value: this.props.stats[key].wpm});
-                count += 1;
-            }
         } else if (stats.length > this.props.stats.length) {
             data = [];
         } else {

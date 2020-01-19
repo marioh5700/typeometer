@@ -47,7 +47,6 @@ class TypingModule extends Component {
             });
         } else if (prevProps.loggedIn === true && this.props.loggedIn === false) {
             this.setState({stats: [], tempValues: []}, () => {
-                console.log(this.state.stats);  
                 this.getData();
             });
         }
