@@ -26,8 +26,7 @@ let db = new sqlite3.Database('stats.db', (err) => {
 });
 
 app.get('/', (req, res) => {
-    let sql = `SELECT Wpm wpm FROM wpm_history
-           ORDER BY id`;
+    let sql = `SELECT wpm FROM wpm_history WHERE username="${req.session.username}" ORDER BY id`;
     db.all(sql, [], (err, rows) => {
         if (err) {
             throw err;
@@ -45,16 +44,15 @@ app.post('/postrun', (req, res) => {
             return console.log(err.message);
           }
 
-        sql = `SELECT COUNT(*) FROM wpm_history AS count`;
+        sql = `SELECT COUNT(*) FROM wpm_history AS count WHERE username="${req.session.username}"`;
         let deleteNumber = 0;
 
         db.all(sql, [], (err, countObj) => {
-            console.log(countObj);
             if (countObj[0][Object.keys(countObj[0])[0]] > 10) {
                 deleteNumber = countObj[0][Object.keys(countObj[0])[0]] - 10;
             
 
-                sql = "DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history order by id LIMIT " + deleteNumber + ")";
+                sql = `DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history order by id LIMIT " + deleteNumber + ")"`;
 
                 db.run(sql, [], function(err) {
                     if (err) {

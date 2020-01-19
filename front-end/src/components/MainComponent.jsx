@@ -24,7 +24,22 @@ class MainComponent extends Component {
     }
 
     register() {
-        console.log(this.state.usernameValue);
+        let params = {
+            username: this.state.usernameValue,
+            password: this.state.passwordValue
+          };
+
+        fetch('http://localhost:5000/register', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(params)
+        })
+        .then(() => {
+            console.log('success');
+        });
     }
 
     login() {
@@ -76,11 +91,16 @@ class MainComponent extends Component {
                             type="button"
                             onClick={this.login}
                             >Login</button>
+                            <button
+                            type="button"
+                            onClick={this.register}
+                            >Register</button>
                             <input name='usernameValue'
                             autoComplete="username"
                             type="text"
                             onChange={this.inputChange}
                             />
+                            
                             <input name="passwordValue"
                             autoComplete="current-password"
                             onChange={this.inputChange}
