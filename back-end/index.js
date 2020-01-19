@@ -52,7 +52,7 @@ app.post('/postrun', (req, res) => {
                 deleteNumber = countObj[0][Object.keys(countObj[0])[0]] - 10;
             
 
-                sql = `DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history order by id LIMIT " + deleteNumber + ")"`;
+                sql = "DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history order by id LIMIT " + deleteNumber + ")";
 
                 db.run(sql, [], function(err) {
                     if (err) {
