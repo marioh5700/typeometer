@@ -12,6 +12,15 @@ code {
     monospace;
 }
 
+.navContainer {
+  height:80px;
+  background-color: #e0e2db;
+  display:flex;
+  justify-content: space-around;
+  align-items: center;
+
+}
+
 .grid line {
   stroke: lightgrey;
   stroke-opacity: 0.7;
@@ -25,15 +34,81 @@ code {
 .wordContainer {
   display:inline-block;
   margin:2px;
+  color:white;
+  font-size: 30pt;
+  font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#formContainer, #wordGeneratorContainer, #wordGeneratorContainerIncorrect, #typingSpaceContainer, #timerContainer {
-  width:80%;
-  margin:auto;
+.countdownContainer {
+  display:flex;
+  width: 35%;
+  align-items: center;
+}
+
+.informationText {
+  color:white;
+  font-size: 15pt;
+  font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#typingModuleContainer {
+  height:650px;
+  background-color: #a8aea4;
+  padding-top: 1em;
+}
+
+#wordAndInputContainer {
+  padding: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  background-color: #5c7479;
+  width:50%;
+  overflow:hidden;
+}
+
+#graphContainer {
+  display:flex;
+  justify-content: center;
+  background-color: #e0e2db;
+}
+
+.lastTenSvg {
+  background-color: white;
+  position: relative;
+  top: -100px;
+  height: auto;
+}
+
+#wordGeneratorContainer, #wordGeneratorContainerIncorrect {
+  margin-bottom:1em;
+  padding-left:1em;
+  padding-right:1em;
+  height: 250px;
+  overflow:hidden;
 }
 
 #wordGeneratorContainerIncorrect :first-child {
   background-color:red;
+}
+
+#typingInformationContainer {
+  padding: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  background-color: #5c7479;
+  width:50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  overflow:hidden;
+}
+
+#lastTenRunsContainer {
+  width: 50%;
+  display: flex;
+  justify-content: center;
 }
 
 /* Bordered form */
@@ -51,20 +126,32 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 
-/* Set a style for all buttons */
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
+.typingInput {
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  font-size: 1.2rem;
+	margin: 0 auto;
+  padding: 0.8rem 1.5rem;
+  background-color: #e0e2db;
   border: none;
-  cursor: pointer;
-  width: 100%;
+  width: 90%;
+  display: block;
 }
 
-/* Add a hover effect for buttons */
-button:hover {
-  opacity: 0.8;
+.btn {
+  width: 160px;
+  height: 50px;
+  cursor: pointer;
+  background: #efcf3f;
+  outline: none;
+  border: none;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 10px;
+}
+
+span {
+  color: white;
+  font-size: 1.3em;
 }
 
 /* Extra style for the cancel button (red) */
@@ -74,6 +161,10 @@ button:hover {
   background-color: #f44336;
 }
 
+.icon {
+  max-width: 60%;
+  max-height: 60%;
+}
 /* Center the avatar image inside this container */
 .imgcontainer {
   text-align: center;
@@ -144,6 +235,18 @@ span.psw {
   animation: animatezoom 0.6s
 }
 
+.countDownBarFill {
+  background-color: white;
+  height: 20px;
+  transition: 5000ms linear;
+}
+
+.countDownBarDrain {
+  background-color: white;
+  height: 20px;
+  transition: 1000ms linear;
+}
+
 @-webkit-keyframes animatezoom {
   from {-webkit-transform: scale(0)}
   to {-webkit-transform: scale(1)}
@@ -156,4 +259,31 @@ span.psw {
 
 #cancelContainer {
   background-color:#f1f1f1
+}
+
+@media only screen and (max-width: 1400px) {
+  .wordContainer {
+    display:inline-block;
+    margin:2px;
+    color:white;
+    font-size: 25pt;
+    font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .wordContainer {
+    display:inline-block;
+    margin:2px;
+    color:white;
+    font-size: 20pt;
+    font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #typingModuleContainer {
+    background-color: #a8aea4;
+    padding-top: 1em;
+  }
 }

@@ -7,9 +7,9 @@ class LastTenRuns extends Component {
     constructor(props){
         super(props);
         this.state = {
-            margin: {top: 30, right: 30, bottom: 70, left: 60},
-            width: 800,
-            height: 600,
+            margin: {top: 40, right: 30, bottom: 40, left: 60},
+            width: 1000,
+            height: 800,
         }
 
         this.drawChart = this.drawChart.bind(this);
@@ -59,6 +59,7 @@ class LastTenRuns extends Component {
         const height = this.state.height - margin.top - margin.bottom; 
         const width = this.state.width - margin.left - margin.right;
         const svg = d3.select(this.refs.svg)
+        .attr("viewBox", "0 0 1000 800")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -84,13 +85,13 @@ class LastTenRuns extends Component {
             xAxis.call(d3.axisBottom(x).tickValues([]));
 
             y.domain([0, d3.max(data, function(d) { return d.value }) ]);
-            yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
+            yAxis.transition().duration(1000).call(d3.axisLeft(y).ticks(5).tickSize(-width));
         } else {
             x.domain(10);
             xAxis.call(d3.axisBottom(x).tickValues([]));
 
             y.domain([0, 50 ]);
-            yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
+            yAxis.transition().duration(1000).call(d3.axisLeft(y).ticks(5).tickSize(-width));
         }
 
         var bars = svg.selectAll("rect")
@@ -113,7 +114,7 @@ class LastTenRuns extends Component {
             })
         .attr("y",  d => { return y(d.value); })
         .attr("height",  d => { return height - y(d.value); })
-        .attr("fill", "#69b3a2");      
+        .attr("fill", "#84cdca");      
 
         var key = function(d) {
             return d.key;
@@ -146,6 +147,12 @@ class LastTenRuns extends Component {
             })
         .attr("y",  d => { return y(d.value) + 25; })
         .attr("height",  d => { return height - y(d.value); });
+
+        d3.selectAll(".yAxis>.tick>text")
+        .each(function(d, i){
+            d3.select(this).style("font-size",25)
+            .style("color", 'gray');
+        });
 
         barContext.svg = svg;
         barContext.xAxis = xAxis;
@@ -197,7 +204,7 @@ class LastTenRuns extends Component {
 
         x.domain(d3.range(data.length));
         y.domain([0, d3.max(data, function(d) { return d.value }) ]);
-        yAxis.transition().duration(1000).call(d3.axisLeft(y).tickSize(-width));
+        yAxis.transition().duration(1000).call(d3.axisLeft(y).ticks(5).tickSize(-width));
 
         var bars = svg.selectAll("rect")
             .data(data, key);	
@@ -219,7 +226,7 @@ class LastTenRuns extends Component {
         .attr("height", function(d) {
             return height - y(d.value);
         })
-        .attr("fill", "#69b3a2")
+        .attr("fill", "#84cdca")
         .merge(bars)
         .transition()
         .duration(500)
@@ -235,7 +242,7 @@ class LastTenRuns extends Component {
 
         texts.exit()
         .transition()
-        .duration(500)
+        .duration(250)
         .attr("width", 0) 
         .remove();
 
@@ -263,14 +270,20 @@ class LastTenRuns extends Component {
         .attr("y", function(d) { return y(d.value) + 25; })
         .attr("height", function(d) { return height - y(d.value); })
 
+        d3.selectAll(".yAxis>.tick>text")
+        .each(function(d, i){
+            d3.select(this).style("font-size",25)
+            .style("color", 'gray');
+        });
+
         barContext.svg = svg;
         barContext.yAxis = yAxis;
     }
         
     render(){
         return (
-        <div ref='wpmBars'>
-            <svg ref='svg'></svg>
+        <div ref='wpmBars' id='lastTenRunsContainer'>
+            <svg ref='svg' className='lastTenSvg'></svg>
         </div>
         )
     }

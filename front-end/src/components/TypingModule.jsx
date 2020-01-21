@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import WordGenerator from './WordGenerator';
 import TypingSpace from './TypingSpace';
+import TypingInformation from './TypingInformation';
+import LastTenRuns from './LastTenRuns';
 
 class TypingModule extends Component {
     constructor(props){
@@ -177,25 +179,43 @@ class TypingModule extends Component {
         let wpm = this.state.wpm;
         let stats = this.state.stats;
         let loggedIn = this.props.loggedIn;
+        let started = this.state.started;
 
         return (
-            <div id='typingModuleContainer'>
-                <WordGenerator
-                randomWords={randomWords}
-                incorrect={incorrect}/>
-                <TypingSpace
-                content={content}
-                seconds={seconds}
-                wpm={wpm}
-                stats={stats}
-                handleChange={this.handleChange}
-                spacePressed={this.spacePressed}
-                characterTyped={this.characterTyped}
-                startTimer={this.startTimer}
-                resetTimer={this.resetTimer}
-                getData={this.getData}
-                submitRun={this.submitRun}
-                loggedIn={loggedIn}/>
+            <div>
+                <div id='typingModuleContainer'>
+                    <div id='wordAndInputContainer'>
+                        <WordGenerator
+                        randomWords={randomWords}
+                        incorrect={incorrect}/>
+                        <TypingSpace
+                        content={content}
+                        seconds={seconds}
+                        wpm={wpm}
+                        stats={stats}
+                        handleChange={this.handleChange}
+                        spacePressed={this.spacePressed}
+                        characterTyped={this.characterTyped}
+                        startTimer={this.startTimer}
+                        resetTimer={this.resetTimer}
+                        getData={this.getData}
+                        submitRun={this.submitRun}
+                        loggedIn={loggedIn}/>
+                    </div>
+                    <TypingInformation
+                    content={content}
+                    seconds={seconds}
+                    wpm={wpm}
+                    stats={stats}
+                    resetTimer={this.resetTimer}
+                    started={started}/>
+                </div>
+                <div id='graphContainer'>
+                    <LastTenRuns
+                    seconds={seconds}
+                    stats={stats}
+                    loggedIn={loggedIn}/>
+                </div>
             </div>
         )
     }

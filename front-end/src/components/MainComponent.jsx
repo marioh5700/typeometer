@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TypingModule from './TypingModule';
+import logo from './Speedometer.png';
 
 class MainComponent extends Component {
     constructor(props){
@@ -99,44 +100,17 @@ class MainComponent extends Component {
         let loggedIn = this.state.loggedIn;
         let navBar = ''
         if (this.state.loggedIn === false) {
-            navBar =    <div id='formContainer'>
-                            <button onClick={this.loginPopup}>Login</button>
-
-                            <div id="id01" className="modal">
-                                <span onClick={this.loginPopup}
-                                className="close" title="Close Modal">&times;</span>
-
-                                    <form className="modal-content animate formContainer" action="/action_page.php">
-                                        <div className="imgcontainer">
-                                            <img src="img_avatar2.png" alt="Avatar" className="avatar"></img>
-                                        </div>
-
-                                        <div className="container">
-                                            <label htmlFor="usernameValue"><b>Username</b></label>
-                                            <input placeholder="Enter Username" name='usernameValue'
-                                            autoComplete="username"
-                                            type="text"
-                                            onChange={this.inputChange} required></input>
-
-                                            <label htmlFor="passwordValue"><b>Password</b></label>
-                                            <input name="passwordValue"
-                                            autoComplete="current-password"
-                                            onChange={this.inputChange}
-                                            type={"password"}></input>
-
-                                            <button type="button"
-                                            onClick={this.login}>Login</button>
-                                        </div>
-
-                                        <div className="container" id="cancelContainer">
-                                            <button type="button" onClick={this.loginPopup} className="cancelbtn">Cancel</button>
-                                        </div>
-                                    </form>
-                                </div>
+            navBar =    <div className='navContainer'>
+                            <img className='icon' src={logo}/>
+                            <button 
+                            className='btn'
+                            onClick={this.loginPopup}>
+                                <span>LOGIN</span>
+                            </button>
                         </div>
 
         } else {
-            navBar = <form id='formContainer' action=''>
+            navBar = <form className='navContainer' action=''>
                         <button
                         type="button"
                         onClick={this.logout}
@@ -148,7 +122,38 @@ class MainComponent extends Component {
             <div>
                 {navBar}
                 <TypingModule
-                loggedIn={loggedIn}/>                 
+                loggedIn={loggedIn}/>    
+                <div id="id01" className="modal">
+                    <span onClick={this.loginPopup}
+                    className="close" title="Close Modal">&times;</span>
+
+                        <form className="modal-content animate formContainer" action="/action_page.php">
+                            <div className="imgcontainer">
+                                <img src="img_avatar2.png" alt="Avatar" className="avatar"></img>
+                            </div>
+
+                            <div className="container">
+                                <label htmlFor="usernameValue"><b>Username</b></label>
+                                <input placeholder="Enter Username" name='usernameValue'
+                                autoComplete="username"
+                                type="text"
+                                onChange={this.inputChange} required></input>
+
+                                <label htmlFor="passwordValue"><b>Password</b></label>
+                                <input name="passwordValue"
+                                autoComplete="current-password"
+                                onChange={this.inputChange}
+                                type={"password"}></input>
+
+                                <button type="button"
+                                onClick={this.login}>Login</button>
+                            </div>
+
+                            <div className="container" id="cancelContainer">
+                                <button type="button" onClick={this.loginPopup} className="cancelbtn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>             
             </div>
         )
     }

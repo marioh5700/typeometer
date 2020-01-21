@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import LastTenRuns from './LastTenRuns';
 
 class TypingSpace extends Component {
     constructor(props){
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
-        this.resetEvent = this.resetEvent.bind(this);
     }   
 
     componentDidUpdate(prevProps) {
@@ -31,10 +29,6 @@ class TypingSpace extends Component {
 
     }
 
-    resetEvent(){
-        this.props.resetTimer();
-    }
-
     render() {
         let content = this.props.content;
         let seconds = this.props.seconds;
@@ -45,24 +39,12 @@ class TypingSpace extends Component {
         return (
             <div id='typingSpaceContainer'>
                 <input 
+                    className="typingInput"
                     value={content}
                     disabled = {(seconds === 0)? "disabled" : ""}
                     onChange={this.handleChange}
                     onKeyDown={this.keyPressed}
                 />
-                <h1>Time Remaining: {seconds}</h1>
-                <h1>WPM: {wpm}</h1>
-                <button
-                onClick={this.resetEvent}
-                >Reset</button>
-                <div>
-                {stats
-              .map((stat, index) => <h1 key={index} className='wordContainer'>{stat.wpm}</h1>)}
-                </div>
-                <LastTenRuns
-                seconds={seconds}
-                stats={stats}
-                loggedIn={loggedIn}/>
             </div>
         )
     }
