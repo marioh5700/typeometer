@@ -13,6 +13,7 @@ class TypingModule extends Component {
         'who', 'make', 'when', 'can', 'more', 'if', 'no', 'man', 'out', 'other', 'so', 'what', 'time',
          'up', 'go', 'about', 'than', 'into', 'could', 'state', 'only', 'new', 'year', 'some', 'take', 
          'come', 'these', 'know', 'see', 'use', 'get', 'like', 'then', 'first', 'any'],
+        setTime: 5,
         randomWords : [],
         content: '',
         incorrect: false,
@@ -143,13 +144,14 @@ class TypingModule extends Component {
         if (!this.state.started){
             this.countdown = setInterval(() => {
                 const seconds = this.state.seconds;
+                const setTime = this.state.setTime;
 
                 if (seconds > 0) {
                     this.setState(({seconds}) => ({
                         seconds: seconds - 1
                     }))
                     this.setState(({charCount, seconds}) => ({
-                        wpm: ((charCount / 5) / ((30 - seconds) / 60))
+                        wpm: ((charCount / 5) / ((setTime - seconds) / 60))
                     }))
                 } else {
                     clearInterval(this.countdown);
