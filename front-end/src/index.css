@@ -156,9 +156,20 @@ span {
 
 /* Extra style for the cancel button (red) */
 .cancelbtn {
-  width: auto;
-  padding: 10px 18px;
-  background-color: #f44336;
+    width: 20%;
+    margin-left: 40%;
+    margin-right: 40%;
+    height:50px;
+    background: none;
+    outline: none;
+    border: #f53f27 solid;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 10px;
+    transition: 100ms linear;
+}
+
+.cancelbtn:hover{
+  transform: scale(1.1);
 }
 
 .icon {
@@ -208,7 +219,40 @@ span.psw {
   background-color: #fefefe;
   margin: 5px auto; /* 15% from the top and centered */
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 35%; /* Could be more or less, depending on screen size */
+}
+
+.modal-login {
+  width: 35%;
+  margin-left: 32.5%;
+  margin-right: 32.5%;
+  height:50px;
+  background: none;
+  outline: none;
+  border: #efcf3f solid;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 10px;
+  transition: 100ms linear;
+}
+
+.modal-login:hover {
+  transform: scale(1.1);
+}
+
+.modal-cancel {
+  width: 35%;
+  margin-left: 32.5%;
+  margin-right: 32.5%;
+  height:50px;
+  background: none;
+  outline: none;
+  border: #efcf3f solid;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 10px;
+}
+
+.popupLogin {
+  color: black;
 }
 
 /* The Close Button */
@@ -258,7 +302,8 @@ span.psw {
 }
 
 #cancelContainer {
-  background-color:#f1f1f1
+  background-color:#f1f1f1;
+  height: 50px;
 }
 
 @media only screen and (max-width: 1400px) {

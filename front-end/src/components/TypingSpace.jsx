@@ -10,7 +10,7 @@ class TypingSpace extends Component {
     componentDidUpdate(prevProps) {
         if ((this.props.seconds === 0) && (this.props.seconds !== prevProps.seconds)) {
             this.props.submitRun();
-        } else if (this.props.seconds === 5) {
+        } else if (this.props.seconds === 5 && this.props.popup === false) {
             this._input.focus();
         }
 

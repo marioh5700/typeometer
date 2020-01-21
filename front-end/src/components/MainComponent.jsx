@@ -95,6 +95,7 @@ class MainComponent extends Component {
     render() {
         let loggedIn = this.state.loggedIn;
         let navBar = ''
+        let popup = this.state.popup;
         if (this.state.loggedIn === false) {
             navBar =    <div className='navContainer'>
                             <img className='icon' src={logo}/>
@@ -106,18 +107,21 @@ class MainComponent extends Component {
                         </div>
 
         } else {
-            navBar = <form className='navContainer' action=''>
+            navBar = <div className='navContainer' action=''>
+                        <img className='icon' src={logo}/>
                         <button
                         type="button"
+                        className='btn'
                         onClick={this.logout}
-                        >Logout</button>                
-                    </form>
+                        ><span>LOGOUT</span></button>                
+                    </div>
         }
 
         return (
             <div>
                 {navBar}
                 <TypingModule
+                popup={popup}
                 loggedIn={loggedIn}/>    
                 <div id="id01" className="modal">
                     <span onClick={this.loginPopup}
@@ -125,28 +129,30 @@ class MainComponent extends Component {
 
                         <form className="modal-content animate formContainer" action="/action_page.php">
                             <div className="imgcontainer">
-                                <img src="img_avatar2.png" alt="Avatar" className="avatar"></img>
+                                <img className='icon' src={logo}/>
                             </div>
 
                             <div className="container">
-                                <label htmlFor="usernameValue"><b>Username</b></label>
+                                <label htmlFor="usernameValue"><span className='popupLogin'>Username</span></label>
                                 <input placeholder="Enter Username" name='usernameValue'
                                 autoComplete="username"
                                 type="text"
                                 onChange={this.inputChange} required></input>
 
-                                <label htmlFor="passwordValue"><b>Password</b></label>
+                                <label htmlFor="passwordValue"><span className='popupLogin'>Password</span></label>
                                 <input name="passwordValue"
+                                placeholder="Enter Password"
                                 autoComplete="current-password"
                                 onChange={this.inputChange}
                                 type={"password"}></input>
 
                                 <button type="button"
-                                onClick={this.login}>Login</button>
+                                className="modal-login"
+                                onClick={this.login}><span className='popupLogin'>LOGIN</span></button>
                             </div>
 
                             <div className="container" id="cancelContainer">
-                                <button type="button" onClick={this.loginPopup} className="cancelbtn">Cancel</button>
+                                <button type="button" onClick={this.loginPopup} className="cancelbtn"><span className="popupLogin">CANCEL</span></button>
                             </div>
                         </form>
                     </div>             

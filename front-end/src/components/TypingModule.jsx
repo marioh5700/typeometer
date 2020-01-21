@@ -182,6 +182,7 @@ class TypingModule extends Component {
         let stats = this.state.stats;
         let loggedIn = this.props.loggedIn;
         let started = this.state.started;
+        let popup = this.props.popup;
 
         return (
             <div>
@@ -202,7 +203,8 @@ class TypingModule extends Component {
                         resetTimer={this.resetTimer}
                         getData={this.getData}
                         submitRun={this.submitRun}
-                        loggedIn={loggedIn}/>
+                        loggedIn={loggedIn}
+                        popup={popup}/>
                     </div>
                     <TypingInformation
                     content={content}
