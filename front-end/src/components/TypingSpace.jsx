@@ -10,7 +10,10 @@ class TypingSpace extends Component {
     componentDidUpdate(prevProps) {
         if ((this.props.seconds === 0) && (this.props.seconds !== prevProps.seconds)) {
             this.props.submitRun();
+        } else if (this.props.seconds === 5) {
+            this._input.focus();
         }
+
     }
 
     handleChange(event){
@@ -32,14 +35,13 @@ class TypingSpace extends Component {
     render() {
         let content = this.props.content;
         let seconds = this.props.seconds;
-        let wpm = Math.round(this.props.wpm);
-        let stats = this.props.stats;
-        let loggedIn = this.props.loggedIn;
 
         return (
             <div id='typingSpaceContainer'>
                 <input 
                     className="typingInput"
+                    autoFocus={true}
+                    ref={c => (this._input = c)}
                     value={content}
                     disabled = {(seconds === 0)? "disabled" : ""}
                     onChange={this.handleChange}

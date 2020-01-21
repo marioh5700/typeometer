@@ -18,10 +18,6 @@ class MainComponent extends Component {
         this.loginPopup = this.loginPopup.bind(this);
     }
 
-    componentDidMount() {
-        this.checkLogged();
-    }
-
     inputChange(event) {
         this.setState({[event.target.name]: event.target.value})
     }

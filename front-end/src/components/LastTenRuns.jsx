@@ -7,7 +7,7 @@ class LastTenRuns extends Component {
     constructor(props){
         super(props);
         this.state = {
-            margin: {top: 40, right: 30, bottom: 40, left: 60},
+            margin: {top: 40, right: 30, bottom: -9, left: 60},
             width: 1000,
             height: 800,
         }
