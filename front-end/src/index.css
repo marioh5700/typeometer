@@ -12,9 +12,13 @@ code {
     monospace;
 }
 
+#root {
+  background-image: url('./components/background.png');
+  background-size: cover;
+}
+
 .navContainer {
   height:80px;
-  background-color: #e0e2db;
   display:flex;
   justify-content: space-around;
   align-items: center;
@@ -52,8 +56,7 @@ code {
 }
 
 #typingModuleContainer {
-  height:650px;
-  background-color: #a8aea4;
+  height:750px;
   padding-top: 1em;
 }
 
@@ -76,7 +79,7 @@ code {
 .lastTenSvg {
   background-color: white;
   position: relative;
-  top: -100px;
+  top: -200px;
   height: auto;
 }
 
@@ -142,7 +145,7 @@ input[type=text], input[type=password] {
   width: 160px;
   height: 50px;
   cursor: pointer;
-  background: #efcf3f;
+  background: none;
   outline: none;
   border: none;
   font-family: 'Roboto', sans-serif;
@@ -281,13 +284,13 @@ span.psw {
 }
 
 .countDownBarFill {
-  background-color: white;
+  background-color: #ff7335;
   height: 40px;
   transition: 5000ms linear;
 }
 
 .countDownBarDrain {
-  background-color: white;
+  background-color: #1de9b6;
   height: 40px;
   transition: 1000ms linear;
 }
