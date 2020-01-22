@@ -81,7 +81,7 @@ class TypingModule extends Component {
     }
 
     submitRun() {
-        if (this.props.loggedIn) {
+        if (this.props.loggedIn && document.cookie !== null) {
             let params = {
                 wpm: Math.round(this.state.wpm)
             };
@@ -97,6 +97,8 @@ class TypingModule extends Component {
             .then((results) => {
                 this.getData()
             });
+        } else if (this.props.loggedIn){
+            this.props.logout();
         } else {
             let data = this.state.tempValues;
             data.push({wpm: Math.round(this.state.wpm)});

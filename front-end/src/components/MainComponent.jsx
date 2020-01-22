@@ -121,6 +121,7 @@ class MainComponent extends Component {
             <div>
                 {navBar}
                 <TypingModule
+                logout={this.logout}
                 popup={popup}
                 loggedIn={loggedIn}/>    
                 <div id="id01" className="modal">
