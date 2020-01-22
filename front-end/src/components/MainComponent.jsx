@@ -9,7 +9,8 @@ class MainComponent extends Component {
         loggedIn: false,
         usernameValue: '',
         passwordValue: '',
-        popup: false};
+        popup: false,
+        validForm: false};
         
         this.inputChange = this.inputChange.bind(this);
         this.login = this.login.bind(this);
@@ -19,7 +20,13 @@ class MainComponent extends Component {
     }
 
     inputChange(event) {
-        this.setState({[event.target.name]: event.target.value})
+        this.setState({[event.target.name]: event.target.value}, () => {
+            if (this.state.usernameValue === '' || this.state.passwordValue === '') {
+                this.setState({validForm: false});
+            } else {
+                this.setState({validForm: true});
+            }
+        });
     }
 
     loginPopup() {
@@ -33,43 +40,57 @@ class MainComponent extends Component {
     }
 
     register() {
-        let params = {
-            username: this.state.usernameValue,
-            password: this.state.passwordValue
-          };
+        if (this.state.validForm){
+            let params = {
+                username: this.state.usernameValue,
+                password: this.state.passwordValue
+            };
 
-        fetch('http://localhost:5000/register', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(params)
-        })
-        .then(() => {
-            console.log('success');
-        });
+            fetch('http://localhost:5000/register', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(params)
+            })
+            .then(res => res.json())
+            .then((response) => {
+                if (response) {
+                    alert('Success');
+                } else {
+                    alert('Username Already Exists');
+                }
+            });
+        }
     }
 
     login() {
-        let params = {
-            username: this.state.usernameValue,
-            password: this.state.passwordValue
-          };
-
-        fetch('http://localhost:5000/login', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(params)
-        })
-        .then(res => res.json())
-        .then((response) => {
-            this.setState({loggedIn: response,
-            popup: false});
-        });
+        if (this.state.validForm){
+            let params = {
+                username: this.state.usernameValue,
+                password: this.state.passwordValue
+              };
+    
+            fetch('http://localhost:5000/login', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(params)
+            })
+            .then(res => res.json())
+            .then((response) => {
+                this.setState({loggedIn: response,
+                popup: false});
+                if (!response) {
+                    alert('Username or Password Incorrect');
+                } else {
+                    document.getElementById('id01').style.display='none';
+                }
+            });
+        }
     }
 
     logout() {
@@ -98,7 +119,7 @@ class MainComponent extends Component {
         let popup = this.state.popup;
         if (this.state.loggedIn === false) {
             navBar =    <div className='navContainer'>
-                            <img className='icon' src={logo}/>
+                            <img className='icon' src={logo} alt='logo'/>
                             <button 
                             className='btn'
                             onClick={this.loginPopup}>
@@ -108,7 +129,7 @@ class MainComponent extends Component {
 
         } else {
             navBar = <div className='navContainer' action=''>
-                        <img className='icon' src={logo}/>
+                        <img className='icon' src={logo} alt='logo'/>
                         <button
                         type="button"
                         className='btn'
@@ -130,7 +151,7 @@ class MainComponent extends Component {
 
                         <form className="modal-content animate formContainer" action="/action_page.php">
                             <div className="imgcontainer">
-                                <img className='icon' src={logo}/>
+                                <img className='icon' src={logo} alt='logo'/>
                             </div>
 
                             <div className="container">
@@ -150,6 +171,9 @@ class MainComponent extends Component {
                                 <button type="button"
                                 className="modal-login"
                                 onClick={this.login}><span className='popupLogin'>LOGIN</span></button>
+                                <button type="button"
+                                className="modal-login"
+                                onClick={this.register}><span className='popupLogin'>REGISTER</span></button>
                             </div>
 
                             <div className="container" id="cancelContainer">

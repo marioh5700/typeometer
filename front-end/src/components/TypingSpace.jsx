@@ -41,6 +41,7 @@ class TypingSpace extends Component {
                 <input 
                     className="typingInput"
                     autoFocus={true}
+                    tabIndex="-1"
                     ref={c => (this._input = c)}
                     value={content}
                     disabled = {(seconds === 0)? "disabled" : ""}

@@ -11,7 +11,6 @@ class TypingInformation extends Component {
     }
 
     render() {
-        let content = this.props.content;
         let seconds = this.props.seconds;
         let wpm = Math.round(this.props.wpm);
         let started = this.props.started;
@@ -19,9 +18,8 @@ class TypingInformation extends Component {
         return (
             <div id='typingInformationContainer'>
                 <div className='countdownContainer'>
-                    <div className='countDownBar'
+                    <div
                     className= {(started === true)? 'countDownBarFill' : 'countDownBarDrain'}
-                    style = {(started === true)? {transition: 100 + "ms linear"} : {transition: 5000 + "ms linear"}}
                     style = {(started === true)? {width: 0 + '%'} : {width: 80 + '%'}}
                     ></div>
                     <p className='informationText' style={{margin: 5 + 'px'}}>{seconds}s</p>
