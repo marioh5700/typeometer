@@ -114,7 +114,7 @@ class LastTenRuns extends Component {
             })
         .attr("y",  d => { return y(d.value); })
         .attr("height",  d => { return height - y(d.value); })
-        .attr("fill", "#84cdca");      
+        .attr("fill", "#38c09e");      
 
         var key = function(d) {
             return d.key;
@@ -226,7 +226,7 @@ class LastTenRuns extends Component {
         .attr("height", function(d) {
             return height - y(d.value);
         })
-        .attr("fill", "#84cdca")
+        .attr("fill", "#38c09e")
         .merge(bars)
         .transition()
         .duration(500)

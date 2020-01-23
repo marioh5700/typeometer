@@ -10,7 +10,7 @@ app.use(session({
     secret: 'not@very@inspiring@:(',
     resave: true,
     saveUninitialized: true,
-    cookie: {maxAge: 1800000}
+    cookie: {maxAge: 3600000}
 }));
 app.use(express.json());
 app.use(cors({
@@ -72,8 +72,10 @@ app.post('/postrun', (req, res) => {
 app.post('/login', (req, res) => {
     let sql = `SELECT username, hash FROM userbase WHERE username="${req.body.username}"`;
     db.get(sql, [], (err, userObj) => {
-        if (userObj.length > 0) {
-            res.send('Incorrect Username or Password');
+        if (err) {
+            res.send(false);
+        } else if (!userObj) {
+            res.send(false);
         } else {
             let match = pwhash.compareHash(req.body.password, userObj.hash);
             if (match) {
@@ -102,14 +104,14 @@ app.post('/register', (req, res) => {
     let sql = `SELECT username FROM userbase WHERE username="${req.body.username}"`;
     db.all(sql, [], (err, userObj) => {
         if (userObj.length > 0) {
-            res.send('Username already taken');
+            res.send(false);
         } else {
             let sql = `INSERT INTO userbase (username, hash) VALUES (?, ?)`;
             db.run(sql, [req.body.username, pwhash.getHashedPass(req.body.password)], (err) => {
                 if (err) {
                     return console.log(err.message);
                 }
-                res.send('Success');
+                res.send(true);
             });
         }
     });
