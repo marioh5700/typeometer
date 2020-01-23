@@ -118,7 +118,5 @@ app.post('/register', (req, res) => {
 
 });
 
-//PORT
-//process.env.PORT
-const port = 5000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`istening on port ${port}...`))

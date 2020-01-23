@@ -68,7 +68,7 @@ class TypingModule extends Component {
 
     getData() {
         if (this.props.loggedIn){
-            fetch('http://localhost:5000/', {
+            fetch('https://typeometer-backend.herokuapp.com/', {
                 credentials: 'include'
             })
             .then(res => res.json())
@@ -86,7 +86,7 @@ class TypingModule extends Component {
                 wpm: Math.round(this.state.wpm)
             };
 
-            fetch('http://localhost:5000/postrun', {
+            fetch('https://typeometer-backend.herokuapp.com/postrun', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

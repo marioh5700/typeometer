@@ -46,7 +46,7 @@ class MainComponent extends Component {
                 password: this.state.passwordValue
             };
 
-            fetch('http://localhost:5000/register', {
+            fetch('https://typeometer-backend.herokuapp.com/register', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -72,7 +72,7 @@ class MainComponent extends Component {
                 password: this.state.passwordValue
               };
     
-            fetch('http://localhost:5000/login', {
+            fetch('https://typeometer-backend.herokuapp.com/login', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -94,7 +94,7 @@ class MainComponent extends Component {
     }
 
     logout() {
-        fetch('http://localhost:5000/logout', {
+        fetch('https://typeometer-backend.herokuapp.com/logout', {
             credentials: 'include'
         })
         .then(res => res.json())
@@ -104,7 +104,7 @@ class MainComponent extends Component {
     }
 
     checkLogged() {
-        fetch('http://localhost:5000/checkLogged', {
+        fetch('https://typeometer-backend.herokuapp.com/checkLogged', {
             credentials: 'include'
         })
         .then(res => res.json())
