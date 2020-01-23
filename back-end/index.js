@@ -15,7 +15,7 @@ app.use(session({
 app.use(express.json());
 app.use(cors({
     credentials: true,
-    origin: 'https://typeometer.herokuapp.com/'
+    origin: 'https://typeometer.herokuapp.com'
 }));
 
 let db = new sqlite3.Database('stats.db', (err) => {
@@ -118,5 +118,5 @@ app.post('/register', (req, res) => {
 
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`istening on port ${port}...`))
