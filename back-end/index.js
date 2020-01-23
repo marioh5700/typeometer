@@ -15,7 +15,7 @@ app.use(session({
 app.use(express.json());
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000'
+    origin: 'https://typeometer.herokuapp.com/'
 }));
 
 let db = new sqlite3.Database('stats.db', (err) => {
