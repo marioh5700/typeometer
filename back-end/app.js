@@ -25,6 +25,8 @@ let db = new sqlite3.Database('stats.db', (err) => {
     console.log('Connected to the stats database.');
 });
 
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 app.get('/', (req, res) => {
     let sql = `SELECT wpm FROM wpm_history WHERE username="${req.session.username}" ORDER BY id`;
     db.all(sql, [], (err, rows) => {
