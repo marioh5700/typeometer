@@ -13,12 +13,12 @@ class TypingModule extends Component {
         'who', 'make', 'when', 'can', 'more', 'if', 'no', 'man', 'out', 'other', 'so', 'what', 'time',
          'up', 'go', 'about', 'than', 'into', 'could', 'state', 'only', 'new', 'year', 'some', 'take', 
          'come', 'these', 'know', 'see', 'use', 'get', 'like', 'then', 'first', 'any'],
-        setTime: 5,
+        setTime: 30,
         randomWords : [],
         content: '',
         incorrect: false,
         started: false,
-        seconds: 5,
+        seconds: 30,
         charCount: 0,
         wpm: 0,
         stats: [],
@@ -170,7 +170,7 @@ class TypingModule extends Component {
                         incorrect:false,
                         charCount: 0,
                         started: false,
-                        seconds: 5,
+                        seconds: this.state.setTime,
                         wpm: 0})
         this.randomiseWords();
     }
