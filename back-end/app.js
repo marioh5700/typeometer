@@ -48,12 +48,12 @@ app.post('/postrun', (req, res) => {
         let deleteNumber = 0;
 
         db.all(sql, [], (err, countObj) => {
-            console.log(countObj);
+            console.log(countObj[0][Object.keys(countObj[0])[0]]);
             if (countObj[0][Object.keys(countObj[0])[0]] > 10) {
                 deleteNumber = countObj[0][Object.keys(countObj[0])[0]] - 10;
-            
+                console.log(deleteNumber);
 
-                sql = `DELETE FROM wpm_history WHERE username="${req.session.username}" AND id IN (SELECT id FROM wpm_history order by id LIMIT ` + deleteNumber + ")";
+                sql = `DELETE FROM wpm_history WHERE id IN (SELECT id FROM wpm_history WHERE username="${req.session.username}" ORDER BY id LIMIT ${deleteNumber})`;
 
                 db.run(sql, [], function(err) {
                     if (err) {
